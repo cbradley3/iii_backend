@@ -15,3 +15,11 @@ use Illuminate\Http\Request;
 
 
 Route::post('storeArticle', 'ArticlesController@store');
+Route::get('getArticles', 'ArticlesController@index');
+Route::post('updateArticle/{id}', 'ArticlesController@update');
+Route::get('showArticle/{id}', 'ArticlesController@show');
+Route::post('deleteArticle/{id}', 'ArticlesController@destroy');
+
+Route::get('getContacts', 'ContactsController@index');
+Route::post('storeContact', 'ContactsController@store');
+Route::get('showContacts/{id}', 'ContactsController@show');
