@@ -5,13 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Article;
 use Response;
+use Illuminate\Support\Facades\Validator;
+use Purifier;
+use Carbon\Carbon;
 
 class ArticlesController extends Controller
 {
   //list of articles
   public function index()
   {
-    $articles = Article::all();
+    $articles = Article::orderBy("id", "desc")->get();
+
+    foreach($articles as $key => $article)
+    {
+      $articleDate = Carbon::createFromTimeStamp(strtotime($article->created_at))->diffForHumans();
+      $article->articleDate = $articleDate;
+
+      if(strlen($article->body) > 399)
+      {
+        $article->body = substr($article->body, 0, 399)."...";
+      }
+    }
 
     return Response::json($articles);
 
@@ -21,6 +35,21 @@ class ArticlesController extends Controller
   public function store(Request $request)
 
   {
+
+    $rules = [
+      'title' => 'required',
+      'body' => 'required',
+      'image' => 'required'
+
+    ];
+
+    $validator = Validator::make(Purifier::clean($request->all()), $rules);
+
+    if($validator -> fails())
+    {
+      return Response::json(["error" => "You need to fill out all fields."]);
+    }
+
     $article = new Article;
     $article->title = $request->input('title');
     $article->body = $request->input('body');
@@ -32,7 +61,7 @@ class ArticlesController extends Controller
 
     $article->save();
 
-    return Response::json(["success" => "You did it."]);
+    return Response::json(["success" => "Success! You did it!"]);
 
   }
 
