@@ -90,7 +90,7 @@ class ArticlesController extends Controller
   public function show($id)
   {
     $article = Article::find($id);
-
+    $article->articleDate = Carbon::createFromTimeStamp(strtotime($article->created_at))->diffForHumans();
     return Response::json($article);
   }
   //deletes a single article
