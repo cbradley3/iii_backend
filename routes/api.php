@@ -23,3 +23,5 @@ Route::post('deleteArticle/{id}', 'ArticlesController@destroy');
 Route::get('getContacts', 'ContactsController@index');
 Route::post('storeContact', 'ContactsController@store');
 Route::get('showContacts/{id}', 'ContactsController@show');
+
+Route::post('signup', 'AuthController@signup');
