@@ -8,9 +8,14 @@ use Response;
 use Illuminate\Support\Facades\Validator;
 use Purifier;
 use Carbon\Carbon;
+use JWTAuth;
 
 class ArticlesController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware("jwt.auth", ["only" => ["store","update", "destroy"]]);
+  }
   //list of articles
   public function index()
   {

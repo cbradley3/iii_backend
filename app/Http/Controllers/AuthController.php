@@ -8,6 +8,7 @@ use Purifier;
 use Response;
 use Hash;
 use App\User;
+use JWTAuth;
 
 class AuthController extends Controller
 {
@@ -22,7 +23,7 @@ class AuthController extends Controller
 
     if($validator->fails())
     {
-      return Response::json(["error"=>"Please fill out all fields"]);
+      return Response::json(["error"=>"Please fill out all fields."]);
     }
 
     $check = User::where("email","=",$request->input("email"))->orWhere("name","=",$request->input("username"))->first();
@@ -35,8 +36,31 @@ class AuthController extends Controller
     $user->name = $request->input("username");
     $user->email = $request->input("email");
     $user->password = Hash::make($request->input("password"));
+    $user->roleID = 2;
     $user->save();
 
     return Response::json(["success"=>"Thanks for signing up!"]);
+  }
+
+  public function SignIn(Request $request)
+  {
+    $rules=[
+      "email" => "required",
+      "password" => "required",
+    ];
+
+    $validator = Validator::make(Purifier::clean($request->all()),$rules);
+
+    if($validator->fails())
+    {
+      return Response::json(["error"=>"Please fill out all fields"]);
+    }
+    $email = $request->input("email");
+    $password = $request->input("password");
+
+    $cred = compact("email","password", ["email","password"]);
+    $token = JWTAuth::attempt($cred);
+
+    return Response::json(compact("token"));
   }
 }

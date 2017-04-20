@@ -25,3 +25,4 @@ Route::post('storeContact', 'ContactsController@store');
 Route::get('showContacts/{id}', 'ContactsController@show');
 
 Route::post('signup', 'AuthController@signup');
+Route::post('signin', 'AuthController@signin');
