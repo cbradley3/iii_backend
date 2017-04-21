@@ -10,6 +10,7 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
       $rules=[
+        "name" => "required",
         "body" => "required",
         "articleID" => "required",
       ];
