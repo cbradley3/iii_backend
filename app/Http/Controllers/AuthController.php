@@ -9,9 +9,14 @@ use Response;
 use Hash;
 use App\User;
 use JWTAuth;
+use Auth;
 
 class AuthController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware("jwt.auth", ["only" => ["getUser"]]);
+  }
   public function SignUp(Request $request)
   {
     $rules=[
@@ -62,5 +67,11 @@ class AuthController extends Controller
     $token = JWTAuth::attempt($cred);
 
     return Response::json(compact("token"));
+  }
+
+  public function getUser()
+  {
+    $user = Auth::user();
+    return Response::json($user);
   }
 }
