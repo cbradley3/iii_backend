@@ -29,4 +29,4 @@ Route::post('signin', 'AuthController@signin');
 
 Route::get('getComments/{id}', 'CommentsController@index');
 Route::post('storeComments', 'CommentsController@store');
-Route::get('getUser', 'AuthController@getuser');
+Route::get('getUser', 'AuthController@getUser');
