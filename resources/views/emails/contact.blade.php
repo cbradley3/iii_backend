@@ -1,0 +1,9 @@
+{{$name}}
+<br/>
+{{$email}}
+<br/>
+{{$number}}
+<br/>
+{{$website}}
+<br/>
+{{$message}}

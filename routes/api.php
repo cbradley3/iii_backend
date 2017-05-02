@@ -30,3 +30,5 @@ Route::post('signin', 'AuthController@signin');
 Route::get('getComments/{id}', 'CommentsController@index');
 Route::post('storeComments', 'CommentsController@store');
 Route::get('getUser', 'AuthController@getUser');
+
+Route::any('{path?}', 'AuthController@index')->where("path", ".+");

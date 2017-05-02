@@ -10,6 +10,7 @@ use Hash;
 use App\User;
 use JWTAuth;
 use Auth;
+use File;
 
 class AuthController extends Controller
 {
@@ -17,6 +18,12 @@ class AuthController extends Controller
   {
     $this->middleware("jwt.auth", ["only" => ["getUser"]]);
   }
+
+  public function index()
+  {
+    return File::get('index.html');
+  }
+
   public function SignUp(Request $request)
   {
     $rules=[

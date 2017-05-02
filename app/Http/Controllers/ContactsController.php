@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Contact;
 use Response;
+use Purifier;
+use Mail;
 
 class ContactsController extends Controller
 {
@@ -17,14 +19,37 @@ class ContactsController extends Controller
 
     public function store(Request $request)
     {
-      $contact = new Contact;
-      $contact->name = $request->input('name');
-      $contact->email = $request->input('email');
-      $contact->number = $request->input('number');
-      $contact->website = $request->input('website');
-      $contact->message = $request->input('message');
+      $rules=[
+        'name' => 'required',
+        'email' => 'required',
+        'number' => 'required',
+        'website' => 'required',
+        'message' => 'required',
+      ];
 
-      $contact->save();
+      $validator = Validator::make(Purifier::clean($request->all()), $rules);
+
+      if($validator->fails())
+      {
+        return Response::json(["error" => "You need to fill out all fields."]);
+      }
+
+      $name = $request->input("name");
+      $email = $request->input("email");
+      $number = $request->input("number");
+      $website = $request->input("website");
+      $message = $request->input("message");
+
+      Mail::send('emails.contact', array(
+        'name' => $name,
+        'email' => $email,
+        'number' => $number,
+        'website' => $website,
+        'message' => $message
+      ), function($name, $email, $number, $website, $message)
+      {
+        $message->to('cb.the.iii@gmail.com', 'Charlie Bradley')->subject('New Potential Client');
+      });
 
       return Response::json(["success" => "You did it."]);
     }
