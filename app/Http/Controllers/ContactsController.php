@@ -7,6 +7,7 @@ use App\Contact;
 use Response;
 use Purifier;
 use Mail;
+use Illuminate\Support\Facades\Validator;
 
 class ContactsController extends Controller
 {
